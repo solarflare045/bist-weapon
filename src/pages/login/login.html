@@ -1,0 +1,7 @@
+<h1 *ngIf="(authenticated$ | async) === false">
+  <a href="https://fistweapon.net/auth">Click here to login!</a>
+</h1>
+
+<h2 *ngIf="error">
+  {{ error }}
+</h2>
