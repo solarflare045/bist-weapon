@@ -4,3 +4,7 @@
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
 @import "../node_modules/admin-lte/dist/css/AdminLTE.css";
 @import "../node_modules/admin-lte/dist/css/skins/skin-red.css";
+
+.pointer {
+  cursor: pointer;
+}

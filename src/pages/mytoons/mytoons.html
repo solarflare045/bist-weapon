@@ -50,6 +50,10 @@
             </tbody>
           </table>
         </div>
+
+        <div class="overlay" *ngIf="!(toons$ | async)">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
       </div>
     </div>
   </div>

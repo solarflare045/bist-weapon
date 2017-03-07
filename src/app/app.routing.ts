@@ -5,6 +5,9 @@ import { NavComponent } from '../components/nav/nav.component';
 import { LoginComponent } from '../pages/login/login';
 import { HomeComponent } from '../pages/home/home';
 import { MyToonsComponent } from '../pages/mytoons/mytoons';
+import { ToonComponent } from '../pages/toons/view/toon';
+
+import { ToonResolver } from '../pages/toons/view/toon.resolve';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -13,8 +16,8 @@ export const ROUTES: Routes = [
 
   { path: '', component: NavComponent, children: [
     { path: 'home', component: HomeComponent },
-
     { path: 'mytoons', component: MyToonsComponent },
+    { path: 'toons/:id', component: ToonComponent, resolve: { toon: ToonResolver } },
   ] },
 ];
 
@@ -26,8 +29,9 @@ export const COMPONENTS = [
   LoginComponent,
   HomeComponent,
   MyToonsComponent,
+  ToonComponent,
 ];
 
 export const RESOLVERS = [
-
+  ToonResolver,
 ];

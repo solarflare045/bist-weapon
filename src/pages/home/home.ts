@@ -5,6 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs/Rx';
 
 import { Toon } from '../../models/toon.model';
 import { GuildRepository } from '../../repositories/guild.repository';
+import { CombineLatestFilter } from '../../services/observable/observable';
 
 @Component({
   templateUrl: './home.html',
@@ -16,6 +17,10 @@ export class HomeComponent {
   constructor(private guild: GuildRepository) {
     this.showAlts$ = new BehaviorSubject(false);
 
-    this.toons$ = this.showAlts$.switchMap((showAlts) => showAlts ? this.guild.toons$ : this.guild.mainToons$);
+    this.toons$ = this.guild.toons$
+      .combineLatest(this.showAlts$)
+      .switchMap(([ toons, showAlts ]) =>
+        CombineLatestFilter(toons, (toon) => toon.position$.map((position) => position === 'main' || showAlts)),
+      );
   }
 }
