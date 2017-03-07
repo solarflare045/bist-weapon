@@ -4,7 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 
-import { CONST_ROUTING, COMPONENTS } from './app.routing';
+import { CONST_ROUTING, COMPONENTS, RESOLVERS } from './app.routing';
+
+import { ToonThumbnailDirective } from '../directives/img/toon-thumbnail.directive';
+
+import { ClassNamePipe } from '../pipes/class-name/class-name.pipe';
+
+import { GuildRepository } from '../repositories/guild.repository';
+import { ToonRepository } from '../repositories/toon.repository';
+import { UserRepository } from '../repositories/user.repository';
+
+import { Api } from '../services/api/api';
+import { Db } from '../services/db/db';
 
 import { AppComponent } from './app.component';
 
@@ -19,6 +30,8 @@ const firebaseConfig: FirebaseAppConfig = {
 @NgModule({
   declarations: [
     AppComponent,
+    ToonThumbnailDirective,
+    ClassNamePipe,
     ...COMPONENTS,
   ],
   imports: [
@@ -28,7 +41,14 @@ const firebaseConfig: FirebaseAppConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     CONST_ROUTING,
   ],
-  providers: [],
+  providers: [
+    GuildRepository,
+    ToonRepository,
+    UserRepository,
+    Api,
+    Db,
+    ...RESOLVERS
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

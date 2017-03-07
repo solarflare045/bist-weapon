@@ -1,23 +1,21 @@
 import { Component } from '@angular/core';
 import { AngularFire } from 'angularfire2';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Rx';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
+
+import { Toon } from '../../models/toon.model';
+import { GuildRepository } from '../../repositories/guild.repository';
 
 @Component({
   templateUrl: './home.html',
 })
 export class HomeComponent {
-  uid$: Observable<string>;
+  showAlts$: BehaviorSubject<boolean>;
+  toons$: Observable<Toon[]>;
 
-  constructor(af: AngularFire, router: Router) {
-    this.uid$ = Observable.from(af.auth)
-      .switchMap((auth) => {
-        if (!auth) {
-          router.navigate([ 'login' ]);
-          return Observable.empty();
-        }
+  constructor(private guild: GuildRepository) {
+    this.showAlts$ = new BehaviorSubject(false);
 
-        return Observable.of(auth.uid);
-      });
+    this.toons$ = this.showAlts$.switchMap((showAlts) => showAlts ? this.guild.toons$ : this.guild.mainToons$);
   }
 }

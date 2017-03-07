@@ -1,22 +1,20 @@
 <section class="content-header">
   <h1>
-    Dashboard
-    <small>{{ uid$ | async }}</small>
+    My Toons
   </h1>
 </section>
 
 <section class="content">
   <div class="row">
     <div class="col-md-12">
+      <div class="callout callout-info">
+        <h4>Info</h4>
+        <p>Only Toons marked as <b>Main</b> or <b>Alt</b> will be visible in the Guild Toons list.</p>
+      </div>
+
       <div class="box">
         <div class="box-header">
           <h3 class="box-title">Toons</h3>
-          <div class="box-tools">
-            <select class="form-control" [ngModel]="showAlts$ | async" (ngModelChange)="showAlts$.next($event)">
-              <option [ngValue]="true">Show Alts</option>
-              <option [ngValue]="false">Hide Alts</option>
-            </select>
-          </div>
         </div>
 
         <div class="box-body no-padding">
@@ -42,15 +40,11 @@
                 </td>
 
                 <td>
-                  <div [ngSwitch]="toon.position$ | async">
-                    <span *ngSwitchCase="'main'">
-                      <i class="fa fa-star"></i> Main
-                    </span>                    
-
-                    <span *ngSwitchCase="'alt'">
-                      <i class="fa fa-star-o"></i> Alt
-                    </span>
-                  </div>
+                  <select class="form-control" [ngModel]="toon.position$ | async" (ngModelChange)="toon.setPosition($event)">
+                    <option ngValue="main">Main</option>
+                    <option ngValue="alt">Alt</option>
+                    <option [ngValue]="null">Hide</option>
+                  </select>
                 </td>
               </tr>
             </tbody>
@@ -58,5 +52,5 @@
         </div>
       </div>
     </div>
-  </div>      
+  </div>
 </section>

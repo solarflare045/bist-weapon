@@ -1,0 +1,52 @@
+<body class="hold-transition skin-red fixed sidebar-mini">
+  <header class="main-header">
+    <div class="logo">
+      <span class="logo-lg"><i class="fa fa-dollar"></i> <b>Bist Weapon</b></span>
+      <span class="logo-sm"><i class="fa fa-dollar"></i></span>
+    </div>
+
+    <nav class="navbar navbar-static-top" role="navigation">
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      <ul class="sidebar-menu">
+        <li class="header">GLOBAL</li>
+
+        <li routerLinkActive="active"><a routerLink="/home"><i class="fa fa-paw"></i> <span>Guild Toons</span></a></li>
+        <li routerLinkActive="active"><a routerLink="/mytoons"><i class="fa fa-users"></i> <span>My Toons</span></a></li>
+
+        <li class="header">MY GUILD TOONS</li>
+
+        <li *ngFor="let toon of toons$ | async" routerLinkActive="active">
+          <a [routerLink]="'/toons/' + toon.key">
+            <i class="fa"
+              [class.fa-star]="(toon.position$ | async) === 'main'"
+              [class.fa-star-o]="(toon.position$ | async) === 'alt'">
+
+            </i>
+
+            <span>
+              {{ toon.name$ | async }}
+              <img class="pull-right img-circle" style="width: 25px; height: 25px;" [appToonThumbnail]="toon.thumbnail$ | async">
+            </span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </aside>
+
+  <div class="content-wrapper">
+    <router-outlet></router-outlet>
+  </div>
+</body>
