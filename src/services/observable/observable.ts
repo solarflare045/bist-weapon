@@ -53,10 +53,37 @@ export function CombineLatestCount<TIn, TOut>(
   return CombineLatestSum(array, project, (val) => predicate(val) ? 1 : 0);
 }
 
+function CombineLatestZip<TIn, TOut>(
+  array: TIn[],
+  projection: Projection<TIn, TOut>,
+): Observable<[ TIn, TOut ][]> {
+
+  return CombineLatestAggregate(array, projection, (results) => _.zipWith<[ TIn, TOut ]>(array, results, (a, r) => [a, r]));
+}
+
+function CombineLatestZipPost<TIn, TOut>(
+  array: TIn[],
+  project: Projection<TIn, TOut>,
+  post: Transform<[ TIn, TOut ][], [ TIn, TOut ][]>,
+): Observable<TIn[]> {
+
+  return CombineLatestZip(array, project)
+    .map((arr) => post(arr))
+    .map((arr) => _.map(arr, ([a, i]) => a));
+}
+
 export function CombineLatestFilter<TIn>(
   array: TIn[],
   predicate: Projection<TIn, boolean>,
 ): Observable<TIn[]> {
 
-  return CombineLatestAggregate(array, predicate, (results) => _.filter(array, (x, i) => results[i]));
+  return CombineLatestZipPost(array, predicate, (results) => _.filter(results, ([val, pred]) => pred));
+}
+
+export function CombineLatestOrderBy<TIn, TOut>(
+  array: TIn[],
+  orderBy: Projection<TIn, TOut>,
+): Observable<TIn[]> {
+
+  return CombineLatestZipPost(array, orderBy, (results) => _.sortBy(results, ([val, sort]) => sort));
 }

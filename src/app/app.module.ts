@@ -6,6 +6,7 @@ import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 
 import { CONST_ROUTING, COMPONENTS, RESOLVERS } from './app.routing';
 
+import { ItemLinkDirective } from '../directives/a/item.directive';
 import { ToonThumbnailDirective } from '../directives/img/toon-thumbnail.directive';
 
 import { ClassNamePipe } from '../pipes/class-name/class-name.pipe';
@@ -30,6 +31,7 @@ const firebaseConfig: FirebaseAppConfig = {
 @NgModule({
   declarations: [
     AppComponent,
+    ItemLinkDirective,
     ToonThumbnailDirective,
     ClassNamePipe,
     ...COMPONENTS,

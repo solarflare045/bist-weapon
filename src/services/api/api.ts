@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, URLSearchParams } from '@angular/http';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
 import * as _ from 'lodash';
 
@@ -24,11 +24,17 @@ export class Api {
       .refCount();
   }
 
-  get<T>(path: string | string[]): Observable<T> {
+  get<T>(path: string | string[], qs: {[key: string]: string} = {}): Observable<T> {
     const urlSegment = _.isArray(path) ? ['', ...<string[]>path].join('/') : path;
+    const search = new URLSearchParams();
+
+    _.each(qs, (value, key) => search.set(key, value));
 
     return this.key.value$
-      .switchMap((key) => this.http.get(`https://us.api.battle.net${ urlSegment }?apikey=${ key }`))
+      .switchMap((key) => {
+        search.set('apikey', key);
+        return this.http.get(`https://us.api.battle.net${ urlSegment }`, { search });
+      })
       .map((response) => response.json())
       .first();
   }
