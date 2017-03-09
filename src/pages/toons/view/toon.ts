@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 import { SLOTS, SLOT_INFOS, SlotInfo } from '../../../constants/slots';
 import { Api } from '../../../services/api/api';
@@ -14,9 +15,8 @@ import { GearRepository } from '../../../repositories/gear.repository';
   templateUrl: './toon.html',
 })
 export class ToonComponent implements OnDestroy {
-  subscription: Subscription;
-  gearing = false;
   gears: (Gear & { slotName: string })[];
+  subscription: Subscription;
   toon: Toon;
 
   constructor(private route: ActivatedRoute, private api: Api, private db: Db, private _gear: GearRepository) {
@@ -33,7 +33,7 @@ export class ToonComponent implements OnDestroy {
   }
 
   getGear(toon: Toon): void {
-    this.gearing = true;
+    toon.markGearUpdating(true);
     Observable.combineLatest( toon.name$, toon.realm$ )
       .first()
       .switchMap(([ name, realm ]) =>
@@ -51,7 +51,8 @@ export class ToonComponent implements OnDestroy {
           .map(([ key, item ]: [ string, Object ]) => Observable.defer(() => this.db.root.child('gear').child(key).ref.set(item)))
           .mergeAll(),
       )
-      .finally(() => this.gearing = false)
+      .do({ complete: () => toon.markGearUpdated() })
+      .finally(() => toon.markGearUpdating(false))
       .subscribe();
   }
 }

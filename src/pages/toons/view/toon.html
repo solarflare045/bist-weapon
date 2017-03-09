@@ -12,8 +12,8 @@
         <div class="box-header">
           <h3 class="box-title">Gear</h3>
           <div class="box-tools">
-            <button class="btn btn-danger btn-flat btn-sm btn-social" role="button" [disabled]="gearing" (click)="getGear(toon)">
-              <i class="fa fa-refresh"></i>
+            <button class="btn btn-flat btn-sm" [class.btn-danger]="!(toon.gearUpdating$ | async)" [disabled]="toon.gearUpdating$ | async" (click)="getGear(toon)">
+              <i class="fa fa-refresh" [class.fa-spin]="toon.gearUpdating$ | async"></i>
               Refresh
             </button>
           </div>

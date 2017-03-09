@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
+import { MomentModule } from 'angular2-moment';
 
 import { CONST_ROUTING, COMPONENTS, RESOLVERS } from './app.routing';
 
@@ -41,6 +42,7 @@ const firebaseConfig: FirebaseAppConfig = {
     BrowserModule,
     FormsModule,
     HttpModule,
+    MomentModule,
     AngularFireModule.initializeApp(firebaseConfig),
     CONST_ROUTING,
   ],

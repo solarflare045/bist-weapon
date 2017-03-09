@@ -8,6 +8,8 @@ export type Query = firebase.database.Query;
 export type Reference = firebase.database.Reference;
 export type Snapshot = firebase.database.DataSnapshot;
 
+export const TIMESTAMP = firebase.database.ServerValue.TIMESTAMP;
+
 @Injectable()
 export class Db {
   constructor(private af: AngularFire) {
@@ -42,6 +44,7 @@ export class SharedNode {
   asClass<T extends SharedNode>(type: new (ref: Reference) => T): T { return new type(this.ref); }
   asList<T>(factory: (ref: Reference) => T) { return new SharedList<T>(this.ref, factory); }
   asValue<T>() { return new SharedValue<T>(this.ref); }
+  asOffsetValue() { return new SharedTimeOffsetNumber(this.ref); }
 
   asLinkList<T>(fullRef: Reference, factory: (ref: Reference) => T) { return new SharedLinkList<T>(this.ref, fullRef, factory); }
 }
@@ -51,6 +54,18 @@ export class SharedValue<T> extends SharedNode {
 
   transaction(updater: (val: T) => T) { return this.ref.transaction(updater); }
   update(val: T) { return this.ref.set(val); }
+}
+
+export class SharedTimeOffsetNumber extends SharedValue<number> {
+  private _timeOffset: SharedValue<number>;
+  public readonly offsetValue$: Observable<number>;
+
+  constructor(ref: Reference) {
+    super(ref);
+    this._timeOffset = this.root().child('.info').child('serverTimeOffset').asValue();
+    this.value$.combineLatest(this._timeOffset.value$)
+      .map(([ value, timediff ]) => _.isNumber(value) ? value + timediff : value);
+  }
 }
 
 interface CacheRef<T> {
