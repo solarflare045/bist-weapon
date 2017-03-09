@@ -20,7 +20,7 @@ export class ItemLinkDirective implements OnDestroy {
     this.subscription = this.gear$
       .switchMap((gear) => Observable.combineLatest( gear.id$, gear.level$, gear.enchant$, gear.gems$ ))
       .map(([ id, level, enchant, gems ]) => {
-        let rel = `item=${ id }&lvl=${ level }`;
+        let rel = `item=${ id }&ilvl=${ level }`;
         if (enchant) { rel += `&ench=${ enchant }`; }
         if (gems.length) { rel += `&gems=${ gems.join(':') }`; }
         return rel;

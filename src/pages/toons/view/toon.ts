@@ -1,33 +1,26 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
+import { SLOTS, SLOT_INFOS, SlotInfo } from '../../../constants/slots';
 import { Api } from '../../../services/api/api';
 import { Db } from '../../../services/db/db';
+import { Gear } from '../../../models/gear.model';
 import { Toon } from '../../../models/toon.model';
-
-const SLOTS = [
-  'head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'waist',
-  'legs', 'feet', 'finger1', 'finger2', 'trinket1', 'trinket2', 'mainHand', 'offHand'
-];
+import { GearRepository } from '../../../repositories/gear.repository';
 
 @Component({
   templateUrl: './toon.html',
 })
-export class ToonComponent implements OnDestroy {
+export class ToonComponent {
   gearing = false;
+  gears: (Gear & { slotName: string })[];
   toon: Toon;
-  subscription: Subscription;
 
-  constructor(private route: ActivatedRoute, private api: Api, private db: Db) {
-    this.subscription = this.route.data
-      .do(({ toon }) => this.toon = toon)
-      .subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+  constructor(private route: ActivatedRoute, private api: Api, private db: Db, private _gear: GearRepository) {
+    this.toon = route.snapshot.data['toon'];
+    this.gears = _.map(SLOT_INFOS, (slot) => _.extend(this._gear.get(this.toon.key, 'have', slot.id), { slotName: slot.name }));
   }
 
   getGear(toon: Toon): void {

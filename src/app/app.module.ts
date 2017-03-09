@@ -11,6 +11,7 @@ import { ToonThumbnailDirective } from '../directives/img/toon-thumbnail.directi
 
 import { ClassNamePipe } from '../pipes/class-name/class-name.pipe';
 
+import { GearRepository } from '../repositories/gear.repository';
 import { GuildRepository } from '../repositories/guild.repository';
 import { ToonRepository } from '../repositories/toon.repository';
 import { UserRepository } from '../repositories/user.repository';
@@ -44,6 +45,7 @@ const firebaseConfig: FirebaseAppConfig = {
     CONST_ROUTING,
   ],
   providers: [
+    GearRepository,
     GuildRepository,
     ToonRepository,
     UserRepository,

@@ -23,14 +23,14 @@
           <table class="table">
             <thead>
               <tr>
-                <th class="col-xs-1">Slot</th>
-                <th class="col-xs-11">Name</th>
+                <th class="col-xs-2">Slot</th>
+                <th class="col-xs-10">Name</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr *ngFor="let gear of toon.gear$ | async">
-                <td>{{ gear.slot$ | async }}</td>
+              <tr *ngFor="let gear of gears">
+                <td>{{ gear.slotName }}</td>
                 <td><a [appItemLink]="gear">{{ gear.name$ | async }}</a></td>
               </tr>
             </tbody>
