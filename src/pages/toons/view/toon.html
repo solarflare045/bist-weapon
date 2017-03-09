@@ -12,7 +12,7 @@
         <div class="box-header">
           <h3 class="box-title">Gear</h3>
           <div class="box-tools">
-            <button class="btn btn-danger btn-flat btn-sm btn-social" [disabled]="gearing" (click)="getGear(toon)">
+            <button class="btn btn-danger btn-flat btn-sm btn-social" role="button" [disabled]="gearing" (click)="getGear(toon)">
               <i class="fa fa-refresh"></i>
               Refresh
             </button>
@@ -24,13 +24,15 @@
             <thead>
               <tr>
                 <th class="col-xs-2">Slot</th>
-                <th class="col-xs-10">Name</th>
+                <th class="col-xs-1">iLvl</th>
+                <th class="col-xs-9">Name</th>
               </tr>
             </thead>
 
             <tbody>
               <tr *ngFor="let gear of gears">
                 <td>{{ gear.slotName }}</td>
+                <td>{{ gear.level$ | async }}</td>
                 <td><a [appItemLink]="gear">{{ gear.name$ | async }}</a></td>
               </tr>
             </tbody>

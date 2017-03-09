@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Component, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
@@ -13,14 +13,23 @@ import { GearRepository } from '../../../repositories/gear.repository';
 @Component({
   templateUrl: './toon.html',
 })
-export class ToonComponent {
+export class ToonComponent implements OnDestroy {
+  subscription: Subscription;
   gearing = false;
   gears: (Gear & { slotName: string })[];
   toon: Toon;
 
   constructor(private route: ActivatedRoute, private api: Api, private db: Db, private _gear: GearRepository) {
-    this.toon = route.snapshot.data['toon'];
-    this.gears = _.map(SLOT_INFOS, (slot) => _.extend(this._gear.get(this.toon.key, 'have', slot.id), { slotName: slot.name }));
+    this.subscription = route.data
+      .do(({ toon }) => {
+        this.toon = toon;
+        this.gears = _.map(SLOT_INFOS, (slot) => _.extend(this._gear.get(this.toon.key, 'have', slot.id), { slotName: slot.name }));
+      })
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   getGear(toon: Toon): void {
