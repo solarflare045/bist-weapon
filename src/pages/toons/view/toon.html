@@ -30,7 +30,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let gear of gears">
+              <tr *ngFor="let gear of gears; let i = index;">
                 <td>{{ gear.slotName }}</td>
                 <td>{{ gear.level$ | async }}</td>
                 <td><a [appItemLink]="gear">{{ gear.name$ | async }}</a></td>
