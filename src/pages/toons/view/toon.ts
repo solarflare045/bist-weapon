@@ -24,6 +24,14 @@ export class ToonComponent implements OnDestroy {
       .do(({ toon }) => {
         this.toon = toon;
         this.gears = _.map(SLOT_INFOS, (slot) => _.extend(this._gear.get(this.toon.key, 'have', slot.id), { slotName: slot.name }));
+
+        this.toon.gearUpdated$
+          .subscribe((updated) => {
+            const recent = moment().subtract(10, 'minutes');
+            if (!moment.isMoment(updated) || updated.isBefore(recent)) {
+              this.getGear(this.toon);
+            }
+          });
       })
       .subscribe();
   }
