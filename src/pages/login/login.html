@@ -1,6 +1,10 @@
-<h1 *ngIf="(authenticated$ | async) === false">
+<h1 *ngIf="(authenticated$ | async) === false && !token">
   <a href="https://fistweapon.net/auth">Click here to login!</a>
 </h1>
+
+<h2 *ngIf="token">
+  Logging you in ...
+</h2>
 
 <h2 *ngIf="error">
   {{ error }}
