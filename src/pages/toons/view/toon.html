@@ -33,7 +33,10 @@
               <tr *ngFor="let gear of gears; let i = index;">
                 <td>{{ gear.slotName }}</td>
                 <td>{{ gear.level$ | async }}</td>
-                <td><a [appItemLink]="gear">{{ gear.name$ | async }}</a></td>
+                <td>
+                  <a [appItemLink]="gear">{{ gear.name$ | async }}</a>
+                  <span *ngIf="!(gear.name$ | async)">&mdash;</span>
+                </td>
               </tr>
             </tbody>
           </table>

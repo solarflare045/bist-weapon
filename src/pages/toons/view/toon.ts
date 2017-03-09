@@ -41,7 +41,7 @@ export class ToonComponent implements OnDestroy {
           .map((response) =>
             _.chain(response.items)
               .pick(SLOTS)
-              .mapValues((value, key) => _.extend({ toon: toon.key, slot: key }, value))
+              .mapValues((value, key) => _.extend({ toon: toon.key, slot: key, type: 'have' }, value))
               .mapKeys((value, key) => `${ name }::have::${ key }`)
               .value(),
           )
