@@ -7,41 +7,16 @@
 
 <section class="content">
   <div class="row">
-    <div class="col-md-12">
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Gear</h3>
-          <div class="box-tools">
-            <button class="btn btn-flat btn-sm" [class.btn-danger]="!(toon.gearUpdating$ | async)" [disabled]="toon.gearUpdating$ | async" (click)="getGear(toon)">
-              <i class="fa fa-refresh" [class.fa-spin]="toon.gearUpdating$ | async"></i>
-              Refresh
-            </button>
-          </div>
-        </div>
+    <div class="col-lg-6">
+      <app-gear-set title="Best in Slot" [gears]="bis" canEdit="true" (edit)="updateGear(toon, $event)">
 
-        <div class="box-body no-padding">
-          <table class="table">
-            <thead>
-              <tr>
-                <th class="col-xs-2">Slot</th>
-                <th class="col-xs-1">iLvl</th>
-                <th class="col-xs-9">Name</th>
-              </tr>
-            </thead>
+      </app-gear-set>
+    </div>
 
-            <tbody>
-              <tr *ngFor="let gear of gears; let i = index;">
-                <td>{{ gear.slotName }}</td>
-                <td>{{ gear.level$ | async }}</td>
-                <td>
-                  <a [appItemLink]="gear">{{ gear.name$ | async }}</a>
-                  <span *ngIf="!(gear.name$ | async)">&mdash;</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <div class="col-lg-6">
+      <app-gear-set title="Current Gear" [gears]="gears" [updateEnabled]="!(toon.gearUpdating$ | async)" [updating]="toon.gearUpdating$ | async" (update)="getGear(toon)">
+
+      </app-gear-set>
     </div>
   </div>
 </section>

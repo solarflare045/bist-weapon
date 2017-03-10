@@ -1,0 +1,66 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">
+        Select Gear
+      </h4>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-xs-2">
+          <h3>1.</h3>
+        </div>
+        
+        <div class="col-xs-10">
+          <div>Press visit</div>
+          <a href="https://www.wowdb.com/items" target="biSelFrame">https://www.wowdb.com/items</a> or
+          <a href="http://www.wowhead.com/item-finder" target="biSelFrame">http://www.wowhead.com/item-finder</a>.
+        </div>
+      </div>
+
+      <hr/>
+
+      <div class="row">
+        <div class="col-xs-2">
+          <h3>2.</h3>
+        </div>
+
+        <div class="col-xs-10">
+          <div>Enter the URL of a given item</div>
+          <input [(ngModel)]="url" type="text" class="form-control" placeholder="http://www.wowdb.com/items/144438-zeks-exterminatus">
+        </div>
+      </div>
+
+      <hr/>
+
+      <div class="row">
+        <div class="col-xs-2">
+          <h3>3.</h3>
+        </div>
+
+        <div class="col-xs-10">
+          <div>Confirm the following item is correct:</div>
+          <div *ngFor="let gear of [ gear$ | async ]">
+            <div *ngIf="lookingUp"><i class="fa fa-refresh fa-spin"></i></div>
+            <a *ngIf="gear" [rel]="rel$ | async">
+              {{ gear.name }}
+            </a>
+          </div>
+        </div>
+      </div>      
+    </div>
+
+    <div class="modal-footer">
+      <div class="row">
+        <div class="col-xs-6">
+          <button type="button" class="btn btn-block btn-flat" (click)="cancel()">Cancel</button>
+        </div>
+
+        <div class="col-xs-6">
+          <button type="button" class="btn btn-block btn-flat btn-success" (click)="confirm()" [disabled]="!gearSelect">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

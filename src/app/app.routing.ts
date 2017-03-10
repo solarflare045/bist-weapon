@@ -6,6 +6,8 @@ import { LoginComponent } from '../pages/login/login';
 import { HomeComponent } from '../pages/home/home';
 import { MyToonsComponent } from '../pages/mytoons/mytoons';
 import { ToonComponent } from '../pages/toons/view/toon';
+import { GearSetComponent } from '../pages/toons/view/gear-set/gear-set';
+import { SelectGearModelComponent } from '../pages/toons/view/select-gear/select-gear';
 
 import { ToonResolver } from '../pages/toons/view/toon.resolve';
 
@@ -30,6 +32,12 @@ export const COMPONENTS = [
   HomeComponent,
   MyToonsComponent,
   ToonComponent,
+  GearSetComponent,
+  SelectGearModelComponent,
+];
+
+export const ENTRY_COMPONENTS = [
+  SelectGearModelComponent,
 ];
 
 export const RESOLVERS = [

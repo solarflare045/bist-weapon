@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { ActivatedRoute } from '@angular/router';
+import { DialogService } from 'ng2-bootstrap-modal';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -10,20 +11,31 @@ import { Db } from '../../../services/db/db';
 import { Gear } from '../../../models/gear.model';
 import { Toon } from '../../../models/toon.model';
 import { GearRepository } from '../../../repositories/gear.repository';
+import { IGearWithSlotName } from './gear-set/gear-set';
+import { ISelectedGear, SelectGearModelComponent } from './select-gear/select-gear';
 
 @Component({
   templateUrl: './toon.html',
 })
 export class ToonComponent implements OnDestroy {
-  gears: (Gear & { slotName: string })[];
+  bis: IGearWithSlotName[];
+  gears: IGearWithSlotName[];
   subscription: Subscription;
   toon: Toon;
 
-  constructor(private route: ActivatedRoute, private api: Api, private db: Db, private _gear: GearRepository) {
+  constructor(
+    private route: ActivatedRoute,
+    private api: Api,
+    private db: Db,
+    private _gear: GearRepository,
+    private _modal: DialogService,
+  ) {
+
     this.subscription = route.data
       .do(({ toon }) => {
         this.toon = toon;
-        this.gears = _.map(SLOT_INFOS, (slot) => _.extend(this._gear.get(this.toon.key, 'have', slot.id), { slotName: slot.name }));
+        this.bis = this.fetchGear(this.toon.key, 'want');
+        this.gears = this.fetchGear(this.toon.key, 'have');
 
         this.toon.gearUpdated$
           .subscribe((updated) => {
@@ -34,6 +46,10 @@ export class ToonComponent implements OnDestroy {
           });
       })
       .subscribe();
+  }
+
+  private fetchGear(toon: string, type: string) {
+    return _.map(SLOT_INFOS, (slot) => _.extend(this._gear.get(toon, type, slot.id), { slotName: slot.name, slotID: slot.id }));
   }
 
   ngOnDestroy(): void {
@@ -62,5 +78,18 @@ export class ToonComponent implements OnDestroy {
       .do({ complete: () => toon.markGearUpdated() })
       .finally(() => toon.markGearUpdating(false))
       .subscribe();
+  }
+
+  updateGear(toon: Toon, ev: { slot: string, gear: Gear }): void {
+    this._modal.addDialog(SelectGearModelComponent)
+      .filter((newGear) => !!newGear)
+      .subscribe((newGear) => {
+        ev.gear.ref.set(
+          _.extend(
+            newGear,
+            { slot: ev.slot, toon: toon.key, type: 'want' },
+          ),
+        );
+      });
   }
 }

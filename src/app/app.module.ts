@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { MomentModule } from 'angular2-moment';
+import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 
-import { CONST_ROUTING, COMPONENTS, RESOLVERS } from './app.routing';
+import { CONST_ROUTING, COMPONENTS, RESOLVERS, ENTRY_COMPONENTS } from './app.routing';
 
 import { ItemLinkDirective } from '../directives/a/item.directive';
 import { ToonThumbnailDirective } from '../directives/img/toon-thumbnail.directive';
@@ -44,6 +45,7 @@ const firebaseConfig: FirebaseAppConfig = {
     HttpModule,
     MomentModule,
     AngularFireModule.initializeApp(firebaseConfig),
+    BootstrapModalModule,
     CONST_ROUTING,
   ],
   providers: [
@@ -55,6 +57,7 @@ const firebaseConfig: FirebaseAppConfig = {
     Db,
     ...RESOLVERS
   ],
+  entryComponents: [...ENTRY_COMPONENTS],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

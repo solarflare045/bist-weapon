@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { CombineLatestAggregate } from '../../services/observable/observable';
 import { Gear } from '../../models/gear.model';
 
-const COLORS = ['#9d9d9d', '#9d9d9d', '#1eff00', '#0070dd', '#a335ee', '#ff8000', '#e6cc80', '#e6cc80'];
+export const COLORS = ['#9d9d9d', '#9d9d9d', '#1eff00', '#0070dd', '#a335ee', '#ff8000', '#e6cc80', '#e6cc80'];
 
 @Directive({
   selector: 'a[appItemLink]',
